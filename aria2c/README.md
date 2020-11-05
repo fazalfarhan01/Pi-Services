@@ -15,3 +15,8 @@ This directory contains files for setting up aria2c web interface as a service
 2. Copy the [aria2c.service](aria2c/aria2c.service) to `/etc/systemd/system/`
 3. Run `sudo systemctl enable aria2c.service`
 4. Run `sudo systemctl start aria2c.service`
+
+## Note - Change the following lines in [aria2c.conf](aria2c/aria2c.conf) accordingly
+- rpc-secret=\<CHANGE ME\>
+- rpc-certificate=\<CHANGE OR COMMENT ME OUT\>
+- rpc-private-key=\<CHANGE OR COMMENT ME OUT\>
