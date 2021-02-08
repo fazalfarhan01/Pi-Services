@@ -1,13 +1,16 @@
 #!/usr/bin/python3
-
 from gpiozero import CPUTemperature
 import blynklib, blynktimer
 
 from IPTools import IPTools
 from systemFunction import SystemFunctions
 
+import threading
+
 # importing configuration file
 import config
+
+from TPLinkController import TP_Link_Controller
 
 blynk = blynklib.Blynk(config.BLYNK_AUTH, server=config.SERVER_NAME, port=config.SERVER_PORT)
 timer = blynktimer.Timer()
@@ -16,7 +19,7 @@ timer = blynktimer.Timer()
 DEBUG_MODE = True
 
 # TIMER TO SEND CURRENT CPU TEMPERATURE
-@timer.register(vpin_num=config.TEMP_PIN, interval=2, run_once=False)
+@timer.register(vpin_num=config.TEMP_PIN, interval=1, run_once=False)
 def writeCPUTemp(vpin_num = config.TEMP_PIN):
     temp = CPUTemperature().temperature
     blynk.virtual_write(vpin_num, temp)
@@ -67,6 +70,32 @@ def performBackup(pin, value):
     if DEBUG_MODE:
         print("Got Backup Request on pin \tV{}\t{}".format(pin, value[0]))
 
+@blynk.handle_event("write V{}".format(config.WiFi_5G_PIN))
+def toggle5GWiFi(pin, value):
+    if value[0] == "1":
+        blynk.notify("Toggling 5G WiFi")
+        threading.Thread(name="toggle 5G", target=toggleWifi, args=["5G"]).start()
+    if DEBUG_MODE:
+        print("Got Toggle 5G WiFi Request on pin \tV{}\t{}".format(pin, value[0]))
+
+@blynk.handle_event("write V{}".format(config.WiFi_2G_PIN))
+def toggle2GWiFi(pin, value):
+    if value[0] == "1":
+        blynk.notify("Toggling 2G WiFi")
+        threading.Thread(name="toggle 2G", target=toggleWifi, args=["2G"]).start()
+    if DEBUG_MODE:
+        print("Got Toggle 2G WiFi Request on pin \tV{}\t{}".format(pin, value[0]))
+
+def toggleWifi(mode):
+    tplink = TP_Link_Controller("fazal.farhan@gmail.com", "mohamedfarhan12")
+    tplink.login()
+    if mode == "5G":
+        tplink.toggle_5g_wifi()
+        print("5G WiFi")
+    else:
+        tplink.toggle_2g_wifi()
+        print("2G WiFi")
+    tplink.close()
 # TO PERFORM BASIC SHUTDOWN
 @blynk.handle_event("write V{}".format(config.SHUTDOWN_PIN))
 def performShutdown(pin, value):
