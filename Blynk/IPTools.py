@@ -12,6 +12,7 @@ class IPTools():
         return localIP
     
     def getPublicIP(self):
+        # USING API FROM https://wtfismyip.com/
         response = loads(get("https://wtfismyip.com/json").content.decode("utf-8"))
         return response["YourFuckingIPAddress"]
 
