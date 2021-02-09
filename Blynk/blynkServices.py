@@ -10,6 +10,8 @@ import threading
 # importing configuration file
 import config
 
+import sys
+
 from TPLinkController import TP_Link_Controller
 
 blynk = blynklib.Blynk(config.BLYNK_AUTH, server=config.SERVER_NAME, port=config.SERVER_PORT)
@@ -87,18 +89,19 @@ def toggle2GWiFi(pin, value):
         print("Got Toggle 2G WiFi Request on pin \tV{}\t{}".format(pin, value[0]))
 
 def toggleWifi(mode):
-    # try:
-    tplink = TP_Link_Controller("fazal.farhan@gmail.com", "mohamedfarhan12", DEBUG_MODE=True)
-    tplink.login()
-    if mode == "5G":
-        tplink.toggle_5g_wifi()
-        print("5G WiFi")
-    else:
-        tplink.toggle_2g_wifi()
-        print("2G WiFi")
-    tplink.close()
-    # except:
-    #     blynk.notify("Error occured!\n\nTry Again.")
+    try:
+        tplink = TP_Link_Controller("fazal.farhan@gmail.com", "mohamedfarhan12", DEBUG_MODE=True)
+        tplink.login()
+        if mode == "5G":
+            tplink.toggle_5g_wifi()
+            print("5G WiFi")
+        else:
+            tplink.toggle_2g_wifi()
+            print("2G WiFi")
+        tplink.close()
+        blynk.notify("Success..!")
+    except:
+        blynk.notify("Error occured!\nError: {}\nContact Developer.".format(sys.exc_info()[0]))
 # TO PERFORM BASIC SHUTDOWN
 @blynk.handle_event("write V{}".format(config.SHUTDOWN_PIN))
 def performShutdown(pin, value):

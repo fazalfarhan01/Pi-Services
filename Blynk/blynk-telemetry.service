@@ -1,3 +1,7 @@
+#Selenium works only when this service file is placed in ~/.config/systemd/user/
+#Check below thread for more info 
+#https://stackoverflow.com/questions/51258883/selenium-python-chromedriver-systemd-not-working?noredirect=1&lq=1
+
 [Unit]
 Description=Blynk Telemetry Service
 After=network.target
@@ -5,10 +9,12 @@ After=network.target
 [Service]
 ExecStart=/usr/bin/python3 /home/pi/projects/services/Blynk/blynkServices.py
 WorkingDirectory=/home/pi/projects/services/Blynk
-StandardOutput=inherit
-StandardError=inherit
-Restart=always
-User=pi
+
+# Uncomment below lines when not placed in ~/.config/systemd/user/
+# StandardOutput=inherit
+# StandardError=inherit
+# Restart=always
+# User=pi
 
 [Install]
 WantedBy=multi-user.target
