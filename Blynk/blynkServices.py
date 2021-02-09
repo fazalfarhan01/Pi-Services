@@ -87,7 +87,8 @@ def toggle2GWiFi(pin, value):
         print("Got Toggle 2G WiFi Request on pin \tV{}\t{}".format(pin, value[0]))
 
 def toggleWifi(mode):
-    tplink = TP_Link_Controller("fazal.farhan@gmail.com", "mohamedfarhan12")
+    # try:
+    tplink = TP_Link_Controller("fazal.farhan@gmail.com", "mohamedfarhan12", DEBUG_MODE=True)
     tplink.login()
     if mode == "5G":
         tplink.toggle_5g_wifi()
@@ -96,6 +97,8 @@ def toggleWifi(mode):
         tplink.toggle_2g_wifi()
         print("2G WiFi")
     tplink.close()
+    # except:
+    #     blynk.notify("Error occured!\n\nTry Again.")
 # TO PERFORM BASIC SHUTDOWN
 @blynk.handle_event("write V{}".format(config.SHUTDOWN_PIN))
 def performShutdown(pin, value):
