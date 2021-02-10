@@ -131,8 +131,9 @@ def toggleWifi(mode):
             blynk.notify("Success..!")
             break
         except:
-            blynk.notify(
-                "Error occured!\nError: {}\nContact Developer.".format(sys.exc_info()[0]))
+            # blynk.notify(
+            #     "Error occured!\nError: {}\nContact Developer.".format(sys.exc_info()[0]))
+            blynk.notify("Error Occured..!\n\nPlease Wait. Retrying!")
 
 
 # TO PERFORM BASIC SHUTDOWN
@@ -145,9 +146,8 @@ def performShutdown(pin, value):
     if DEBUG_MODE:
         print("Got Shutdown Request on pin \tV{}\t{}".format(pin, value[0]))
 
+
 # TO PERFORM BASIC RESTART
-
-
 @blynk.handle_event("write V{}".format(config.RESTART_PIN))
 def performRestart(pin, value):
     if value[0] == "100":

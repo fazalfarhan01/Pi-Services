@@ -30,7 +30,7 @@ class TP_Link_Controller():
         self.DEBUG_MODE = DEBUG_MODE
         options = webdriver.ChromeOptions()
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        # options.headless = True
+        options.headless = True
         self.driver = webdriver.Chrome(
             executable_path=self.driver_path, options=options)
         self.driver.implicitly_wait(30)
