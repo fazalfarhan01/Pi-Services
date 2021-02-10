@@ -11,6 +11,9 @@ import threading
 # importing configuration file
 import config
 
+from BlynkSkill import BlynkSkill
+skill = BlynkSkill()
+
 import sys
 
 from TPLinkController import TP_Link_Controller
@@ -156,6 +159,18 @@ def performRestart(pin, value):
         SystemFunctions().restartSystem()
     if DEBUG_MODE:
         print("Got Restart Request on pin \tV{}\t{}".format(pin, value[0]))
+
+@blynk.handle_event("write V{}".format(config.START_STREAM_PIN))
+def startStreaming(pin, value):
+    if value[0] == "1":
+        camera = skill.get("V50")
+        quality = skill.get("V51")
+        url = "rtsp://admin:admin@ftm.ddns.net:554/cam/realmonitor?channel=" + str(camera) + "&subtype=" + str(int(quality)-1)
+    else:
+        url = ""
+    if DEBUG_MODE:
+        print("Setting Streaming URL: {}".format(url))
+    blynk.set_property(53, "url", url)
 
 
 while True:

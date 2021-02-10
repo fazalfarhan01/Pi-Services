@@ -1,0 +1,19 @@
+{
+    "auth_token": "L2R-hSjriHAgrhyGmTro5jjEhx_Qd1M6",
+    "server_name": "192.168.0.105",
+    "server_port": 8080,
+    "appliance": {
+        "lights": "V0",
+        "dims": "V1",
+        "fan one": "V2",
+        "fan two": "V3",
+        "bed light": "V4",
+        "side light": "V5",
+        "fan 1": "V2",
+        "fan 2": "V3"
+    },
+    "action": {
+        "on": 1,
+        "off": 0
+    }
+}
