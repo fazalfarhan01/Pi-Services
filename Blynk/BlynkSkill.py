@@ -61,7 +61,7 @@ if __name__ == "__main__":
     
     skill = BlynkSkill()
 
-    getResponse = skill.get("V51")
+    getResponse = skill.get("V50")
     # updateResponse = skill.update("V3",0)
 
     print(getResponse)

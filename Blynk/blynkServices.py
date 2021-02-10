@@ -160,18 +160,22 @@ def performRestart(pin, value):
     if DEBUG_MODE:
         print("Got Restart Request on pin \tV{}\t{}".format(pin, value[0]))
 
-@blynk.handle_event("write V{}".format(config.START_STREAM_PIN))
-def startStreaming(pin, value):
-    if value[0] == "1":
-        camera = skill.get("V50")
-        quality = skill.get("V51")
-        url = "rtsp://admin:admin@ftm.ddns.net:554/cam/realmonitor?channel=" + str(camera) + "&subtype=" + str(int(quality)-1)
-    else:
-        url = ""
+@blynk.handle_event("write V{}".format(config.CAMERA_SELECT_PIN))
+def startStreamingOnCamChange(pin, value):
+    setStreamURL(pin, value)
+
+@blynk.handle_event("write V{}".format(config.QUALITY_SELECT_PIN))
+def startStreamingOnQualityChange(pin, value):
+    setStreamURL(pin, value)
+    
+
+def setStreamURL(pin, value):
+    camera = skill.get("V50")
+    quality = skill.get("V51")
+    url = "rtsp://admin:admin@ftm.ddns.net:554/cam/realmonitor?channel=" + str(camera) + "&subtype=" + str(int(quality)-1)
     if DEBUG_MODE:
         print("Setting Streaming URL: {}".format(url))
     blynk.set_property(53, "url", url)
-
 
 while True:
     blynk.run()
