@@ -1,5 +1,5 @@
 BLYNK_AUTH = "L2R-hSjriHAgrhyGmTro5jjEhx_Qd1M6"
-SERVER_NAME = "ftm.ddns.net"
+SERVER_NAME = "192.168.0.105"
 SERVER_PORT = 8080
 
 TEMP_PIN = 0
