@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+from TPLinkController import TP_Link_Controller
+import sys
 from gpiozero import CPUTemperature
 import blynklib
 import blynktimer
@@ -14,9 +16,6 @@ import config
 from BlynkSkill import BlynkSkill
 skill = BlynkSkill()
 
-import sys
-
-from TPLinkController import TP_Link_Controller
 
 blynk = blynklib.Blynk(
     config.BLYNK_AUTH, server=config.SERVER_NAME, port=config.SERVER_PORT)
@@ -160,22 +159,49 @@ def performRestart(pin, value):
     if DEBUG_MODE:
         print("Got Restart Request on pin \tV{}\t{}".format(pin, value[0]))
 
+
 @blynk.handle_event("write V{}".format(config.CAMERA_SELECT_PIN))
 def startStreamingOnCamChange(pin, value):
     setStreamURL(pin, value)
 
+
 @blynk.handle_event("write V{}".format(config.QUALITY_SELECT_PIN))
 def startStreamingOnQualityChange(pin, value):
     setStreamURL(pin, value)
-    
+
 
 def setStreamURL(pin, value):
     camera = skill.get("V50")
     quality = skill.get("V51")
-    url = "rtsp://admin:admin@ftm.ddns.net:554/cam/realmonitor?channel=" + str(camera) + "&subtype=" + str(int(quality)-1)
+    url = "rtsp://admin:admin@ftm.ddns.net:554/cam/realmonitor?channel=" + \
+        str(camera) + "&subtype=" + str(int(quality)-1)
     if DEBUG_MODE:
         print("Setting Streaming URL: {}".format(url))
     blynk.set_property(53, "url", url)
+
+
+@timer.register(vpin_num=config.WiFi_2G_STATUS_PIN, interval=1, run_once=True)
+@timer.register(vpin_num=config.WiFi_2G_STATUS_PIN, interval=10*60, run_once=False)
+def sendWiFiStatus(vpin_num=config.WiFi_2G_STATUS_PIN):
+    threading.Thread(name="WiFi Status", target=setWiFiStatus).start()
+
+def setWiFiStatus():
+    try:
+        tplink = TP_Link_Controller(
+            config.TP_LINK_LOGIN_EMAIL, config.TP_LINK_LOGIN_PASSWORD, DEBUG_MODE=True)
+        tplink.login()
+        response = tplink.get_status()
+        wifi_2g_status = response["data"]["wireless_2g_enable"].upper()
+        wifi_5g_status = response["data"]["wireless_5g_enable"].upper()
+        if DEBUG_MODE:
+            print("Setting 2G WiFi Status: {}".format(wifi_2g_status))
+            print("Setting 5G WiFi Status: {}".format(wifi_5g_status))
+        blynk.virtual_write(config.WiFi_2G_STATUS_PIN, wifi_2g_status)
+        blynk.virtual_write(config.WiFi_5G_STATUS_PIN, wifi_5g_status)
+        tplink.close()
+    except:
+        sendWiFiStatus()
+
 
 while True:
     blynk.run()
