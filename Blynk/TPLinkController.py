@@ -30,7 +30,8 @@ class TP_Link_Controller():
                  router_url="192.168.0.1",
                  driver_path="./bin/chromedriver.exe",
                  browsermobproxy_location="./bin/browsermob-proxy-2.1.4/bin/browsermob-proxy",
-                 DEBUG_MODE=False):
+                 DEBUG_MODE=False,
+                 headless = True):
         # VARIABLES
         self.proxyOptions = {'port': 8111}
         self.driver_path = self.__get_driver_path(driver_path)
@@ -41,7 +42,12 @@ class TP_Link_Controller():
         self.DEBUG_MODE = DEBUG_MODE
         options = webdriver.ChromeOptions()
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        # options.headless = True
+
+        # GET HEADLESS MODE FROM __init__, IF IN DEBUG MODE, OVERRIDE AND DONT RUN IN HEADLESS MODE BY DEFAULT
+        # IF NOT IN DEBUD MODE, IT WILL RUN IN HEADLESS MODE BY DEFAULT
+        options.headless = headless
+        if self.DEBUG_MODE:
+            options.headless = not DEBUG_MODE
 
         self.server = Server(path=self.proxy_path, options=self.proxyOptions)
         self.server.start()
