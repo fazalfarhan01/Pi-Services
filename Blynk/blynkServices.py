@@ -200,6 +200,7 @@ def toggleWifi(mode):
                 else:
                     wifi_5g_status = "ON"
                 blynk.virtual_write(config.WiFi_5G_STATUS_PIN, wifi_5g_status)
+                message = "5G WiFi Toggled..!"
             else:
                 tplink.toggle_2g_wifi()
                 print("2G WiFi Toggeled")
@@ -208,13 +209,15 @@ def toggleWifi(mode):
                 else:
                     wifi_2g_status = "ON"
                 blynk.virtual_write(config.WiFi_2G_STATUS_PIN, wifi_2g_status)
+                message = "2.4G WiFi Toggled..!"
             tplink.close()
-            blynk.notify("Success..!")
+            blynk.notify("Success..!" + message)
             break
         except:
             # blynk.notify(
             #     "Error occured!\nError: {}\nContact Developer.".format(sys.exc_info()[0]))
             blynk.notify("Error Occured..!\n\nPlease Wait. Retrying!")
+            tplink.close()
 
 
 while True:

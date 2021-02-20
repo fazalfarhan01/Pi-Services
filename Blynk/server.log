@@ -4,37 +4,10 @@ WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$Ref
 WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$2
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-[INFO  2021-02-11T17:44:10,120 net.lightbody.bmp.proxy.Main] (main) Starting BrowserMob Proxy version 2.1.4 
-[INFO  2021-02-11T17:44:10,915 org.eclipse.jetty.util.log] (main) jetty-7.x.y-SNAPSHOT 
-[INFO  2021-02-11T17:44:11,259 org.eclipse.jetty.util.log] (main) started o.e.j.s.ServletContextHandler{/,null} 
-[WARN  2021-02-11T17:44:13,807 org.eclipse.jetty.util.log] (main) FAILED SelectChannelConnector@0.0.0.0:8111: java.net.BindException: Address already in use 
-[WARN  2021-02-11T17:44:13,808 org.eclipse.jetty.util.log] (main) FAILED org.eclipse.jetty.server.Server@1ffa30b: java.net.BindException: Address already in use 
-[ERROR 2021-02-11T17:44:13,811 net.lightbody.bmp.proxy.Main] (main) Failed to start Jetty server. Aborting. java.net.BindException: Address already in use
-	at sun.nio.ch.Net.bind0(Native Method) ~[?:?]
-	at sun.nio.ch.Net.bind(Net.java:455) ~[?:?]
-	at sun.nio.ch.Net.bind(Net.java:447) ~[?:?]
-	at sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:227) ~[?:?]
-	at sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:80) ~[?:?]
-	at org.eclipse.jetty.server.nio.SelectChannelConnector.open(SelectChannelConnector.java:162) ~[browsermob-dist-2.1.4.jar:?]
-	at org.eclipse.jetty.server.AbstractConnector.doStart(AbstractConnector.java:356) ~[browsermob-dist-2.1.4.jar:?]
-	at org.eclipse.jetty.server.nio.SelectChannelConnector.doStart(SelectChannelConnector.java:240) ~[browsermob-dist-2.1.4.jar:?]
-	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:55) ~[browsermob-dist-2.1.4.jar:?]
-	at org.eclipse.jetty.server.Server.doStart(Server.java:269) ~[browsermob-dist-2.1.4.jar:?]
-	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:55) ~[browsermob-dist-2.1.4.jar:?]
-	at net.lightbody.bmp.proxy.Main.main(Main.java:64) [browsermob-dist-2.1.4.jar:?]
-
-Exception in thread "main" net.lightbody.bmp.exception.JettyException: Unable to start Jetty server
-	at net.lightbody.bmp.proxy.Main.main(Main.java:68)
-Caused by: java.net.BindException: Address already in use
-	at java.base/sun.nio.ch.Net.bind0(Native Method)
-	at java.base/sun.nio.ch.Net.bind(Net.java:455)
-	at java.base/sun.nio.ch.Net.bind(Net.java:447)
-	at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:227)
-	at java.base/sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:80)
-	at org.eclipse.jetty.server.nio.SelectChannelConnector.open(SelectChannelConnector.java:162)
-	at org.eclipse.jetty.server.AbstractConnector.doStart(AbstractConnector.java:356)
-	at org.eclipse.jetty.server.nio.SelectChannelConnector.doStart(SelectChannelConnector.java:240)
-	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:55)
-	at org.eclipse.jetty.server.Server.doStart(Server.java:269)
-	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:55)
-	at net.lightbody.bmp.proxy.Main.main(Main.java:64)
+[INFO  2021-02-20T10:05:00,886 net.lightbody.bmp.proxy.Main] (main) Starting BrowserMob Proxy version 2.1.4 
+[INFO  2021-02-20T10:05:01,215 org.eclipse.jetty.util.log] (main) jetty-7.x.y-SNAPSHOT 
+[INFO  2021-02-20T10:05:01,553 org.eclipse.jetty.util.log] (main) started o.e.j.s.ServletContextHandler{/,null} 
+[INFO  2021-02-20T10:05:02,450 org.eclipse.jetty.util.log] (main) Started SelectChannelConnector@0.0.0.0:8111 
+[INFO  2021-02-20T10:05:05,989 org.littleshoot.proxy.impl.DefaultHttpProxyServer] (qtp31760415-18) Starting proxy at address: 0.0.0.0/0.0.0.0:8112 
+[INFO  2021-02-20T10:05:06,194 org.littleshoot.proxy.impl.DefaultHttpProxyServer] (qtp31760415-18) Proxy listening with TCP transport 
+[INFO  2021-02-20T10:05:06,475 org.littleshoot.proxy.impl.DefaultHttpProxyServer] (qtp31760415-18) Proxy started at address: /0:0:0:0:0:0:0:0:8112 
