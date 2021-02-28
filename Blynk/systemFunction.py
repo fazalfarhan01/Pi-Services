@@ -1,6 +1,7 @@
 import subprocess
 import sys
 import threading
+import psutil
 
 
 class SystemFunctions():
@@ -54,8 +55,21 @@ class SystemFunctions():
                                   stderr=self.STD_ERR, stdin=self.STD_IN, shell=True)
         stream.communicate()
         
+    def getWiFiStatus(self):
+        status = False
+        for proc in psutil.process_iter(['pid', 'name', 'username']):
+            if "hostapd" in proc.info["name"]:
+                status = True
+        return status
 
-
+    def toggleWiFi(self, mode:bool):
+        if mode == True:
+            command = "sudo systemctl stop hostapd"
+        else:
+            command = "sudo systemctl start hostapd"
+        stream = subprocess.Popen(command, stdout=self.STD_OUT,
+                                  stderr=self.STD_ERR, stdin=self.STD_IN, shell=True)
+        stream.communicate()
 if __name__ == "__main__":
     sysFunc = SystemFunctions(DEBUG_MODE=True)
     # sysFunc.getUpdates()

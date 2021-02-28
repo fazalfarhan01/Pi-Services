@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from TPLinkController import TP_Link_Controller
+# from TPLinkController import TP_Link_Controller
 import sys
 from gpiozero import CPUTemperature
 import blynklib
@@ -96,24 +96,37 @@ def performBackup(pin, value):
 
 @blynk.handle_event("write V{}".format(config.WiFi_5G_PIN))
 def toggle5GWiFi(pin, value):
-    if value[0] == "1":
-        blynk.notify("Toggling 5G WiFi")
-        threading.Thread(name="toggle 5G", target=toggleWifi,
-                         args=["5G"]).start()
-    if DEBUG_MODE:
-        print("Got Toggle 5G WiFi Request on pin \tV{}\t{}".format(
-            pin, value[0]))
+    pass
+    # if value[0] == "1":
+    #     blynk.notify("Toggling 5G WiFi")
+    #     threading.Thread(name="toggle 5G", target=toggleWifi,
+    #                      args=["5G"]).start()
+    # if DEBUG_MODE:
+    #     print("Got Toggle 5G WiFi Request on pin \tV{}\t{}".format(
+    #         pin, value[0]))
 
 
 @blynk.handle_event("write V{}".format(config.WiFi_2G_PIN))
 def toggle2GWiFi(pin, value):
-    if value[0] == "1":
-        blynk.notify("Toggling 2G WiFi")
-        threading.Thread(name="toggle 2G", target=toggleWifi,
-                         args=["2G"]).start()
+    currentStatus = SystemFunctions().getWiFiStatus()
+    if currentStatus == True:
+        message = "Turning OFF WiFi"
+    else:
+        message = "Turning ON WiFi"
     if DEBUG_MODE:
-        print("Got Toggle 2G WiFi Request on pin \tV{}\t{}".format(
-            pin, value[0]))
+        print(message)
+    # SystemFunctions().toggleWiFi(currentStatus)
+    threading.Thread(name="Toggle WiFI", target=SystemFunctions(
+    ).toggleWiFi, args=[currentStatus]).start()
+    blynk.notify(message)
+    blynk.virtual_write(config.WiFi_2G_PIN, int(currentStatus))
+    # if value[0] == "1":
+    #     blynk.notify("Toggling 2G WiFi")
+    #     threading.Thread(name="toggle 2G", target=toggleWifi,
+    #                      args=["2G"]).start()
+    # if DEBUG_MODE:
+    #     print("Got Toggle 2G WiFi Request on pin \tV{}\t{}".format(
+    #         pin, value[0]))
 
 
 # TO PERFORM BASIC SHUTDOWN
@@ -149,10 +162,14 @@ def startStreamingOnQualityChange(pin, value):
 
 
 # Run once on start and every 60 mins
-# @timer.register(vpin_num=config.WiFi_2G_STATUS_PIN, interval=60*60, run_once=False)
-@timer.register(vpin_num=config.WiFi_2G_STATUS_PIN, interval=1, run_once=True)
-def sendWiFiStatus(vpin_num=config.WiFi_2G_STATUS_PIN):
-    threading.Thread(name="WiFi Status", target=setWiFiStatus).start()
+@timer.register(vpin_num=config.WiFi_2G_PIN, interval=5, run_once=False)
+@timer.register(vpin_num=config.WiFi_2G_PIN, interval=1, run_once=True)
+def sendWiFiStatus(vpin_num=config.WiFi_2G_PIN):
+    status = SystemFunctions().getWiFiStatus()
+    if DEBUG_MODE:
+        print("Got WiFi Status: {}".format(status))
+    blynk.virtual_write(config.WiFi_2G_PIN, int(
+        SystemFunctions().getWiFiStatus()))
 
 
 def setStreamURL(pin, value):
@@ -190,7 +207,8 @@ def toggleWifi(mode):
     while True:
         # Keep Trying until Success
         try:
-            tplink = TP_Link_Controller(config.TP_LINK_LOGIN_EMAIL, config.TP_LINK_LOGIN_PASSWORD, DEBUG_MODE=DEBUG_MODE)
+            tplink = TP_Link_Controller(
+                config.TP_LINK_LOGIN_EMAIL, config.TP_LINK_LOGIN_PASSWORD, DEBUG_MODE=DEBUG_MODE)
             tplink.login()
             if mode == "5G":
                 tplink.toggle_5g_wifi()

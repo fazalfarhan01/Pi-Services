@@ -7,14 +7,14 @@ Description=Blynk Telemetry Service
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /home/pi/projects/services/Blynk/blynkServices.py
-WorkingDirectory=/home/pi/projects/services/Blynk
+ExecStart=/usr/bin/python3 /home/pi/Pi-Services/Blynk/blynkServices.py
+WorkingDirectory=/home/pi/Pi-Services/Blynk
 Restart=always
 StandardError=inherit
 StandardOutput=inherit
 
 # Uncomment below lines when not placed in ~/.config/systemd/user/
-# User=pi
+User=pi
 
 [Install]
 WantedBy=default.target
