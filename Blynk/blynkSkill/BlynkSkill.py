@@ -1,7 +1,7 @@
 import requests
 import json
 import threading
-import Errors
+import blynkSkill.Errors as Errors
 
 
 class BlynkSkill():
