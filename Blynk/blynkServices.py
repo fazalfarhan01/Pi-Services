@@ -4,6 +4,7 @@ from gpiozero import CPUTemperature
 import blynklib
 import blynktimer
 import threading
+import psutil
 
 import config
 
@@ -54,6 +55,21 @@ def writePublicIP(vpin_num=config.PUBLIC_IP_PIN):
             print("Sending Public IP Addrs to pin \tV{}\t{}".format(vpin_num, IP))
     except:
         print("No Internet IG")
+
+
+@timer.register(vpin_num=config.CPU_USAGE_PINS[0], interval=1, run_once=True)
+def writeCPUUsage(vpin_num=config.CPU_USAGE_PINS[0]):
+    threading.Thread(name="CPU Usage", target=sendCPUUsage).start()
+
+def sendCPUUsage():
+    while True:
+        usage = psutil.cpu_percent(1, True)
+        for i in range(len(usage)):
+            if DEBUG_MODE:
+                print("CPU{} Usage: {}\t\t".format(i, usage[i]), end="")
+            blynk.virtual_write(config.CPU_USAGE_PINS[i], usage[i])
+        if DEBUG_MODE:
+            print("")
 
 
 '''
